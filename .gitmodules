@@ -1,0 +1,9 @@
+[submodule "third_party/unified-io-2.pytorch"]
+	path = third_party/unified-io-2.pytorch
+	url = https://github.com/allenai/unified-io-2.pytorch.git
+[submodule "src/visarg/tasks/localization/models/LISA"]
+	path = src/visarg/tasks/localization/models/LISA
+	url = https://github.com/dvlab-research/LISA.git
+[submodule "third_party/UNINEXT"]
+	path = third_party/UNINEXT
+	url = https://github.com/MasterBin-IIAU/UNINEXT.git

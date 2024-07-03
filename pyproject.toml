@@ -1,0 +1,9 @@
+[tool.poetry]
+name = "visarg"
+version = "0.1.0"
+description = "Visual Argument Project"
+authors = ["Anonymous"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
