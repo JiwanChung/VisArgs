@@ -19,8 +19,7 @@ def llava(img, targets):
   # device = "cuda" if torch.cuda.is_available() else "cpu"
   # print(device)
   # model.to(device)
-  if isinstance(img, str):
-    img = Image.open(img)
+  img = Image.open(img)
   h, w, _ = np.array(img).shape
   bboxes = []
   for target in targets:

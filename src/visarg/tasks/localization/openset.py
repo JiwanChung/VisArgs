@@ -1,8 +1,8 @@
 import json
 import os
 
-from config import DATASET_REPO_ID, IMAGE_PATH, OUT_PATH
-from visarg.others.utils import interUnion
+from config import DATASET_REPO_ID, IMAGE_PATH, OUT_PATH, ANNOTATION
+from visarg.others.utils import interUnion, save_image
 from tqdm import tqdm
 
 from datasets import load_dataset
@@ -26,7 +26,7 @@ def load_model(model_name):
 
 
 def openset_grounding(model_name):
-    data = load_dataset(DATASET_REPO_ID)['train']
+  data = load_dataset(DATASET_REPO_ID, data_files=ANNOTATION, split="train")
     
     print(f"== Openset Ground : {model_name} ==")
     
@@ -43,11 +43,11 @@ def openset_grounding(model_name):
         local_score = []
         local_iou = []
         
-        if 'bboxes' not in item.keys():
+        if 'b_box' not in item.keys():
             print("There is no bbox in data")
             continue
         
-        image = item['image']
+        image_path = save_image(item['url'])
         
         tgt_vps = []
         ground_bboxes = []
@@ -56,9 +56,9 @@ def openset_grounding(model_name):
         for i, vp in enumerate(item['visual_premises']):
             if '"' not in vp and 'text' not in vp and 'bubble' not in vp and 'logo' not in vp:
                 tgt_vps.append(vp)
-                ground_bboxes.append(item['bboxes'][i])
+                ground_bboxes.append(item['b_box'][i])
         
-        bboxes = ground(image, tgt_vps)
+        bboxes = ground(image_path, tgt_vps)
         
         image_result = {
             "vps": tgt_vps,
@@ -95,8 +95,14 @@ def openset_grounding(model_name):
         local_scores.append(local_score)
         local_iou = sum(local_iou)/len(local_iou)
         local_ious.append(local_iou)
+                
+        results[image_path] = image_result
+        local_score = sum(local_score)/len(local_score)
+        local_scores.append(local_score)
+        local_iou = sum(local_iou)/len(local_iou)
+        local_ious.append(local_iou)
         
-    os.makedirs(OUT_PATH, exist_ok=True)
+    os.makedirs(os.path.join(OUT_PATH, "task1"), exist_ok=True)
     with open(os.path.join(OUT_PATH, "task1", f"{model_name}_result.json")) as r_file:
         json.dump(results, r_file)
         

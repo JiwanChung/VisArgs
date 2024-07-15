@@ -22,10 +22,7 @@ def idefics2(image_path, prompt):
     if "<image>" not in prompt:
         prompt = "<image>" + prompt
     
-    if isinstance(image_path, str):
-        image = Image.open(image_path)
-    else:
-        image = image_path
+    image = Image.open(image_path)
     inputs = processor(images=image, text=prompt, return_tensors="pt")
     
     inputs = {k: v.to(DEVICE) for k, v in inputs.items()}

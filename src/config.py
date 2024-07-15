@@ -1,4 +1,7 @@
 ROOT='./'
-DATASET_REPO_ID='mirlab/VisArg'
+DATASET_PATH='./dataset/'
 IMAGE_PATH='./dataset/images'
 OUT_PATH='./out'
+DATASET_REPO_ID='mirlab/VisArg'
+ANNOTATION='annotation.json'
+NEGATIVESET='negativeset.json'

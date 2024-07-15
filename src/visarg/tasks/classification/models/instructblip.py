@@ -11,10 +11,7 @@ model = InstructBlipForConditionalGeneration.from_pretrained(PRETRAINED_PATH, to
 
 
 def instructblip(image_path, prompt):
-    if isinstance(image_path, str):
-        image = Image.open(image_path)
-    else:
-        image = image_path       
+    image = Image.open(image_path)
     inputs = processor(text=prompt, images=image, return_tensors="pt").to(device=DEVICE, dtype=DTYPE)
 
     with torch.no_grad():

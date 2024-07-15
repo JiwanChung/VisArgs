@@ -1,12 +1,11 @@
 import os
 import json
-
 from tqdm import tqdm
-
-from config import DATASET_REPO_ID, OUT_PATH
-from visarg.others.prompts import identification_of_premises_prompt
-
 from datasets import load_dataset
+
+from config import DATASET_PATH, OUT_PATH, DATASET_REPO_ID, NEGATIVESET
+from visarg.others.prompts import identification_of_premises_prompt
+from visarg.others.utils import save_image
 
 MODEL_CLASSES = {
   'llava': 'llava',
@@ -61,21 +60,19 @@ def identification_of_premises(model_name):
   colbert_local_scores = []
   colbert_clip_local_scores = []
   semantic_local_scores = []
-  
-  data = load_dataset(DATASET_REPO_ID)['train']
+
+  data = load_dataset(DATASET_REPO_ID, data_files=NEGATIVESET, split="train")
   for item in tqdm(data, desc='Identification_of_premises'):
-    
-    if len(item['negative_sets']) < 0:
+    if len(item['negativeset']) == 0:
       continue
-    
-    image_path = item['image']
+    image_path = save_image(item['url'])
     random_scores = []
     clip_scores = []
     colbert_scores = []
     colbert_clip_scores = []
     semantic_scores = []
-
-    questions = item['negative_sets']
+    
+    questions = item['negativeset']
     for question in questions:
       description = question['description']
       random_option_prompt = gen_option_prompt(question['easy_vp_options'])
@@ -102,7 +99,6 @@ def identification_of_premises(model_name):
       colbert_clip_result = parse_result(colbert_clip_out)
       semantic_result = parse_result(semantic_out)
 
-    
       random_score = 1 if random_result == question['easy_answer'] else 0
       clip_score = 1 if clip_result == question['hard_clip_answer'] else 0
       colbert_score = 1 if colbert_result == question['hard_colbert_answer'] else 0
@@ -125,7 +121,7 @@ def identification_of_premises(model_name):
     colbert_local_scores.append(sum(colbert_scores)/len(colbert_scores))
     colbert_clip_local_scores.append(sum(colbert_clip_scores)/len(colbert_clip_scores))
     semantic_local_scores.append(sum(semantic_scores)/len(semantic_scores))
-
+  
   out_path = os.path.join(OUT_PATH, 'task2', f'{model_name}_result.json')
   if not os.path.exists(os.path.join(OUT_PATH, 'task2')):
     os.makedirs(os.path.join(OUT_PATH, 'task2'))
@@ -143,9 +139,3 @@ def identification_of_premises(model_name):
       "semantic_local_scores" : sum(semantic_local_scores)/len(semantic_local_scores),
     }
     json.dump(total_result, f)
-
-
-
-             
-      
-

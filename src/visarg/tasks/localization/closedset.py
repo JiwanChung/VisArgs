@@ -5,22 +5,22 @@ import copy
 import clip
 from tqdm import tqdm
 from PIL import Image, ImageDraw
-
-from config import DATASET_REPO_ID, IMAGE_PATH, OUT_PATH
-from visarg.others.utils import interUnion
-from visarg.tasks.localization.models.clip import load_model
-
 from datasets import load_dataset
+
+from config import DATASET_PATH, IMAGE_PATH, OUT_PATH, DATASET_REPO_ID, ANNOTATION
+from visarg.others.utils import interUnion, save_image
+from visarg.tasks.localization.models.clip import load_model
 
 def closedset_grounding(model_name):
   model, preprocess = load_model(model_name)
 
-  data = load_dataset(DATASET_REPO_ID)['train']
+  data = load_dataset(DATASET_REPO_ID, data_files=ANNOTATION, split="train")
   scores = []
   for item in tqdm(data, desc='closedset grounding'):
-    img = item['image']
+    image_path = save_image(item['url'])
+    img = Image.open(image_path)
     vps = item['visual_premises']
-    local_boxes = item['bboxes']
+    local_boxes = item['b_box']
 
     filtered_texts = []
     filtered_boxes = []
@@ -68,11 +68,12 @@ def closedset_grounding(model_name):
 
       scores.append(sum(local_scores)/len(local_scores)) 
 
-    out_path = os.path.join(OUT_PATH, 'task1', f'{model_name}_closedset_result.json')
-    if not os.path.exists(os.path.join(OUT_PATH, 'task1')):
-      os.makedirs(os.path.join(OUT_PATH, 'task1'))  
-    with open(out_path, 'w') as f:
-      result = {
-        'scores': sum(scores)/len(scores)
-      }
-      json.dump(result, f)  
+  model_name = model_name.replace('/', '_')
+  out_path = os.path.join(OUT_PATH, 'task1', f'{model_name}_closedset_result.json')
+  if not os.path.exists(os.path.join(OUT_PATH, 'task1')):
+    os.makedirs(os.path.join(OUT_PATH, 'task1'))  
+  with open(out_path, 'w') as f:
+    result = {
+      'scores': sum(scores)/len(scores)
+    }
+    json.dump(result, f)

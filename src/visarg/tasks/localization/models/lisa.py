@@ -46,11 +46,8 @@ def preprocess(
     return x
 
 def lisa(image_path, targets):
-    if isinstance(image_path, str):
-        image_np = cv2.imread(image_path)
-        image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
-    else:
-        image_np = image_path
+    image_np = cv2.imread(image_path)
+    image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
     original_size_list = [image_np.shape[:2]]
 
     image_clip = (

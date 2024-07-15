@@ -18,10 +18,7 @@ model.to(DEVICE)
 tokenizer = LlamaTokenizer.from_pretrained("lmsys/vicuna-7b-v1.5")
 
 def cogvlm(img, prompt):
-    if isinstance(img, str):
-        image = Image.open(img).convert("RGB")
-    else:
-        image = img
+    image = Image.open(img).convert("RGB")
     history = []
     
     if prompt is None:

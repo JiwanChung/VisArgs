@@ -37,29 +37,28 @@ Here's an example instance:
 
 ```
 {
+    'url': 'https://i.pinimg.com/originals/5e/7f/10/5e7f108728fb848eb8e3cccfdd62ef8f.jpg',
     'visual_premises': [
-        'Mannequins in a store window wearing fur coats.',
-        'Outside the window, foxes are looking at the fur coats with expressions of sadness and longing.',
-        'There are dead foxes inside the window.'
+        'A small plant is growing inside a plastic bag.',
+        'The bag contains a bit of soil.',
+        'The bag is tied at the top, enclosing the plant.'
     ],
-    'bboxes': [
-        {'h': 280, 'startX': 31, 'startY': 20, 'w': 362},
-        {'h': 184, 'startX': 133, 'startY': 224, 'w': 325},
-        {'h': 213, 'startX': 182, 'startY': 45, 'w': 248}
+    'conclusion': 'The image represents the struggle of nature to survive in a human-made, constraining environment, highlighting the need for environmental awareness and protection.',
+    'b_box': [
+        {'h': 41, 'startX': 302, 'startY': 554, 'w': 72},
+        {'h': 51, 'startX': 223, 'startY': 589, 'w': 229},
+        {'h': 421, 'startX': 46, 'startY': 219, 'w': 407}
     ],
     'commonsense_premises': [
-        'Animals, like foxes, are often killed for their fur, causing harm to wildlife populations.',
-        'Seeing fur coats displayed on mannequins may evoke empathy from onlookers, especially those concerned about animal welfare.',
-        'The juxtaposition of live foxes outside the window and dead foxes inside suggests a stark contrast between the reality of fur production and the idealized image presented by the store.'
+        'Plants require soil, water, light, and air to grow.',
+        'Plastic bags are not a natural environment for plant growth and can restrict access to necessary resources.',
+        'The act of enclosing the plant in a bag could symbolize suffocation or limitation of growth.'
     ],
-    'conclusion': 'The image conveys a powerful message about the ethical implications of wearing fur, highlighting the suffering and loss experienced by animals in the fur industry.',
     'reasoning_steps': [
-        '(VP1, CP1 -> IC1): The depiction of mannequins wearing fur coats implies the use of animal fur in fashion.',
-        '(VP2, CP2 -> IC2): The expressions of sadness and longing on the faces of the foxes outside the window suggest empathy and emotional connection with the plight of animals.',
-        '(IC2, VP3, CP3 -> IC3): The presence of dead foxes inside the window indicates the tragic consequences of fur production for wildlife.',
-        '(IC1, IC3 -> C): By combining these visual and commonsense premises, the image effectively communicates the ethical concerns associated with wearing fur, urging viewers to consider the impact of their fashion choices on animal welfare.'
-    ],
-    'image': <PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=460x456>
+        '(VP1, VP2, CP1 -> IC1): The small plant is growing, showing its resilience and need for natural resources.',
+        "(VP3, CP2, CP3 -> IC2): The plastic bag enclosing the plant symbolizes human-imposed constraints on nature's growth and survival.",
+        "(IC1, IC2 -> C): The image represents nature's struggle to survive in a constrained environment, emphasizing the importance of environmental protection."
+    ]
 }
 ```
 

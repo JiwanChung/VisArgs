@@ -1,4 +1,4 @@
-from config import (DATASET_REPO_ID, IMAGE_PATH, OUT_PATH)
+from config import (DATASET_REPO_ID, IMAGE_PATH, OUT_PATH, ANNOTATION)
 
 import json
 import os
@@ -8,9 +8,10 @@ nltk.download('punkt')
 
 from tqdm import tqdm
 
-from visarg.others.prompt_styles import PROMPT_STYLES
-
 from datasets import load_dataset
+
+from visarg.others.prompt_styles import PROMPT_STYLES
+from visarg.others.utils import save_image
 
 MODEL_CLASSES = {
   'blip2': 'BLIP2',
@@ -91,8 +92,8 @@ def get_prompt(prompt_func, condition, prompt_style, vps, cps, rs):
 
 
 def deduction_of_conclusion(args):
-  
-  data = load_dataset(DATASET_REPO_ID)['train']
+
+  data = load_dataset(DATASET_REPO_ID, data_files=ANNOTATION, split="train")
 
   print(f'== Load Model : {args.model_name} ==')
   print(f'= Prompt Style {args.prompt_style}')
@@ -104,11 +105,11 @@ def deduction_of_conclusion(args):
   gts = {}
   res = {}
   for idx, item in tqdm(enumerate(data), desc='Deduct conclusion', leave=True):
-    vps = ["Visual Premises (VP):"] + [str(idx+1) + ". " + vp for idx, vp in enumerate(item['visual_premises'])]
-    cps = ["Commonsense Premises (CP):"] + [str(idx+1) + ". " + cp for idx, cp in enumerate(item['commonsense_premises'])]
+    vps = ["Visual Premises (VP):"] + [str(_+1) + ". " + vp for _, vp in enumerate(item['visual_premises'])]
+    cps = ["Commonsense Premises (CP):"] + [str(_+1) + ". " + cp for _, cp in enumerate(item['commonsense_premises'])]
     rs = ["Reasoning Step:"] + item['reasoning_steps']
 
-    image_path = data['image']
+    image_path = save_image(item['url'])
 
     prompt = get_prompt(prompt_func, args.condition, args.prompt_style, vps, cps, rs)
 
@@ -128,7 +129,7 @@ def deduction_of_conclusion(args):
     gts[idx] = item['reasoning_steps'][-1].split('-> C): ')[-1]
     res[idx] = con
 
-  out_path = os.path.join(args.OUT_PATH, 'task3')
+  out_path = os.path.join(OUT_PATH, 'task3')
   os.makedirs(out_path, exist_ok=True)
 
   file_name = args.model_name.lower() + '_' + str(args.condition) + "_" + str(args.prompt_style)
