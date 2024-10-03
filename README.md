@@ -8,10 +8,10 @@
 [Selective Vision is the Challenge for Visual Reasoning: A Benchmark for Visual Argument Understanding](https://arxiv.org/abs/2406.18925)
 
 ```
-@article{chung2024selective,
+@inproceedings{chung2024selective,
   title={Selective Vision is the Challenge for Visual Reasoning: A Benchmark for Visual Argument Understanding},
   author={Chung, Jiwan and Lee, Sungjae and Kim, Minseo and Han, Seungju and Yousefpour, Ashkan and Hessel, Jack and Yu, Youngjae},
-  journal={arXiv preprint arXiv:2406.18925},
+  booktitle={Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing},
   year={2024}
 }
 ```
