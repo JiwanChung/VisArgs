@@ -26,7 +26,7 @@ def load_model(model_name):
 
 
 def openset_grounding(model_name):
-  data = load_dataset(DATASET_REPO_ID, data_files=ANNOTATION, split="train")
+    data = load_dataset(DATASET_REPO_ID, data_files=ANNOTATION, split="train")
     
     print(f"== Openset Ground : {model_name} ==")
     

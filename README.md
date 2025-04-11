@@ -66,7 +66,8 @@ Here's an example instance:
 
 1. Installation
 
-```
+```shell
+    git clone https://github.com/JiwanChung/VisArgs.git --recursive
     pip install torch>=2.1
     pip install -r requirements.txt
     pip install -e .
@@ -74,7 +75,7 @@ Here's an example instance:
 
 2. Data preprocessing
 
-```
+```shell
     python src/visarg/others/preprocess.py
 ```
 
@@ -84,18 +85,20 @@ We provide three complementary tasks for assessing the machine capacity of visua
 
 
 - Task 1 (*Localization of Premises*)
-```
+```shell
     python src/visarg/main.py --task 1 --model_name $MODELNAME --grounding_type "openset"
     python src/visarg/main.py --task 1 --model_name $MODELNAME --grounding_type "closedset"
 ```
 
 - Task 2 (*Idenfication of Premises*)
-```
+```shell
     python src/visarg/main.py --task 2 --model_name $MODENAME
 ```
 
 - Task 3 (*Deduction of Conclusion*)
 
-```
+```shell
     python src/visarg/main.py --task 3 --model_name $MODELNAME --condition 0 --prompt_style 0
+    # After inference, you can calculate scores
+    python src/visarg/others/eval_con.py --gts_path $gts_path --res_path $res_path --metrics bleu:4 cider bert
 ```

@@ -7,3 +7,6 @@
 [submodule "third_party/UNINEXT"]
 	path = third_party/UNINEXT
 	url = https://github.com/MasterBin-IIAU/UNINEXT.git
+[submodule "src/visarg/others/pycocoevalcap"]
+	path = src/visarg/others/pycocoevalcap
+	url = https://github.com/salaniz/pycocoevalcap.git
